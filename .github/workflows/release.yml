@@ -1,8 +1,5 @@
 name: Releaser
-on:
-  push:
-    tags:
-      - 'rumqttd-*'
+on: push
 
 jobs:
   build-release:
@@ -38,13 +35,3 @@ jobs:
 
       - name: Build release binary
         run: cross build --verbose --release ${{ env.TARGET_FLAGS }} -p rumqttd
-
-      - name: rename
-        # this assumes git tag is in format rumqttd-x.x.x
-        run: mv ${{ env.TARGET_DIR }}/release/rumqttd ${{ github.ref_name }}-${{ matrix.build }}
-
-      - name: Upload release archive
-        uses: softprops/action-gh-release@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          files: rumqttd*
